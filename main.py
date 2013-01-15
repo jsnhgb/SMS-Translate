@@ -1,5 +1,3 @@
-#!/usr/bin/python2.4
-# -*- coding: utf-8 -*-
 #
 # Copyright (C) 2010 Google Inc.
 #
@@ -23,6 +21,8 @@ Command-line application that translates some text.
 __author__ = 'jcgregorio@google.com (Joe Gregorio)'
 
 from apiclient.discovery import build
+import json
+#import HTMLParser
 
 
 def main():
@@ -30,13 +30,13 @@ def main():
     # Build a service object for interacting with the API. Visit
     # the Google APIs Console <http://code.google.com/apis/console>
     # to get an API key for your own application.
-    service = build('translate', 'v2',
-        developerKey='AIzaSyCtwxiJRg35WTPdhLApleT6RKipMn78kqE')
-    print service.translations().list(
-        source='en',
-        target='fr',
-        q=['flower', 'car']
-    ).execute()
+    service = build('translate', 'v2', developerKey='AIzaSyCtwxiJRg35WTPdhLApleT6RKipMn78kqE')
+    #h = HTMLParser.HTMLParser()
+    french = service.translations().list(target='fr', format='text',
+                                         q=['flower it is cold outside because it is winter']
+                                         ).execute()
+    #pretty = h.unescape(french)
+    print json.dumps(french, sort_keys=True, indent=4)  #['translations'][0]['translatedText']
 
 if __name__ == '__main__':
     main()
