@@ -33,10 +33,17 @@ def main():
     service = build('translate', 'v2', developerKey='AIzaSyCtwxiJRg35WTPdhLApleT6RKipMn78kqE')
     #h = HTMLParser.HTMLParser()
     french = service.translations().list(target='fr', format='text',
-                                         q=['flower it is cold outside because it is winter']
+                                         q=['flower it \
+                                            is cold outside because it is winter']
                                          ).execute()
+    print type(french)
     #pretty = h.unescape(french)
-    print json.dumps(french, sort_keys=True, indent=4)  #['translations'][0]['translatedText']
+    tt = json.dumps(french, ensure_ascii=False)
+    print type(tt)
+    print tt
+    td = json.loads(tt)
+    print type(td)
+    print td['translations'][0]['translatedText']
 
 if __name__ == '__main__':
     main()

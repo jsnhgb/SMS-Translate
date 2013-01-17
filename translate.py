@@ -4,7 +4,8 @@ from werkzeug.contrib.fixers import ProxyFix
 from twilio import twiml
 from twilio.rest import TwilioRestClient
 from apiclient.discovery import build
-
+from unidecode import unidecode
+import json
 
 # Declare and configure application
 app = Flask(__name__)
@@ -37,8 +38,11 @@ def sms():
     if gtrans['translations'][0]['detectedSourceLanguage'] != 'en':
         #if lang not english then translate that into english
         gtrans = service.translations().list(target='en', format='text', q=body).execute()
+    #use json.dumps to get unicode and not ascii then reload to dict using loads
+    # translation = json.dumps(gtrans, ensure_ascii=False)
+   # translation_dict = json.loads(translation)
     r = client.sms.messages.create(to=request.form['From'], from_="+19177461980",
-                                   body=gtrans['translations'][0]['translatedText'])
+                                   body=unidecode(gtrans['translations'][0]['translatedText']))
     return str(r)
 
 
